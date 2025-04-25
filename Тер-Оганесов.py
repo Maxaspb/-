@@ -20,10 +20,9 @@ class CarImportApp(QWidget):
         layout.addWidget(self.namecar)
 
         self.obem = QLineEdit(self)
-        layout.addWidget(QLabel('Введите объем двигателя (1.0 = 1000): (Если автомобиль электрический вводите 0)'))
+        layout.addWidget(QLabel('Введите объем двигателя в мл: (Если автомобиль электрический вводите 0)'))
         layout.addWidget(self.obem)
-        self.obem.setValidator(QIntValidator(0, 99999999))  # Только положительные числа
-
+        self.obem.setValidator(QIntValidator(0, 99999999))
         self.celm = QComboBox(self)
         self.celm.addItems(['Физическое лицо (для личного использования)',
                            'Физическое лицо (для перепродажи)',
@@ -37,19 +36,19 @@ class CarImportApp(QWidget):
         layout.addWidget(self.dvigat)
 
         self.mosh = QLineEdit(self)
-        layout.addWidget(QLabel('Введите мощность двигателя:'))
+        layout.addWidget(QLabel('Введите мощность двигателя в лс:'))
         layout.addWidget(self.mosh)
-        self.mosh.setValidator(QIntValidator(0, 999999))  # Только положительные числа
+        self.mosh.setValidator(QIntValidator(0, 999999))
 
         self.god = QLineEdit(self)
         layout.addWidget(QLabel('Введите год производства:'))
         layout.addWidget(self.god)
-        self.god.setValidator(QIntValidator(1900, datetime.now().year))  # Год от 1900 до текущего
+        self.god.setValidator(QIntValidator(1900, datetime.now().year))
 
         self.zena = QLineEdit(self)
-        layout.addWidget(QLabel('Введите стоимость автомобиля:'))
+        layout.addWidget(QLabel('Введите стоимость автомобиля в рублях:'))
         layout.addWidget(self.zena)
-        self.zena.setValidator(QIntValidator(0, 999999999999999))  # Только положительные числа
+        self.zena.setValidator(QIntValidator(0, 99999999))
 
         self.calculateButton = QPushButton('Рассчитать', self)
         self.calculateButton.clicked.connect(self.calculate)
@@ -66,8 +65,9 @@ class CarImportApp(QWidget):
             god = int(self.god.text())
             zena = int(self.zena.text())
 
-            if obem < 0 or mosh < 0 or god < 0 or zena < 0:
-                raise ValueError("Числа не могут быть отрицательными")
+            if mosh == 0 or god == 0 or (dvigat != 4 and obem == 0) or god > datetime.now().year:
+                raise ValueError("Некоректные данные") # datetime.now() = 2025-04-24 23:53:сек.милисек
+
 
             utilsbor = 0
             tamozhsbor = 1067
